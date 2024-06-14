@@ -45,19 +45,17 @@ dst-airlines/
 ├── api/
 │   ├── app/
 │   ├── tests/
-│   ├── Dockerfile
-│   └── requirements.txt
+│   └── Dockerfile
 ├── dashboard/
 │   ├── app/
 │   ├── tests/
-│   ├── Dockerfile
-│   └── requirements.txt
+│   └── Dockerfile
 ├── airflow/
-│   ├── dags/
-│   ├── Dockerfile
-│   └── requirements.txt
+│   ├── dags/ 
+│   └── Dockerfile
 ├── docker-compose.yml
 ├── README.md
+├── requirements.txt
 └── docs/
 
 ## Setup
