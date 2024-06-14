@@ -59,3 +59,14 @@ dst-airlines/
 ├── docker-compose.yml
 ├── README.md
 └── docs/
+
+## Setup
+
+### Environment Variables
+
+Create a `.env` file in the root directory of the project and add your credentials:
+
+```env
+CLIENT_ID=your_client_id
+CLIENT_SECRET=your_client_secret
+ACCESS_TOKEN=your_access_token
