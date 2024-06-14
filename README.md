@@ -62,6 +62,27 @@ dst-airlines/
 
 ## Setup
 
+1. **Create and Activate Virtual Environment**:
+
+   - **Unix/Linux/macOS**:
+     ```bash
+     python -m venv venv
+     source venv/bin/activate
+     ```
+
+   - **Windows**:
+     ```bash
+     python -m venv venv
+     venv\Scripts\activate
+     ```
+
+2. **Install Dependencies**:
+
+   After activating the virtual environment, install project dependencies from the root `requirements.txt` file:
+   
+   ```bash
+   pip install -r requirements.txt
+
 ### Environment Variables
 
 Create a `.env` file in the root directory of the project and add your credentials:
