@@ -45,16 +45,6 @@ dst-airlines/
 ├── api/
 │   ├── app/
 │   ├── tests/
-<<<<<<< HEAD
-│   ├── Dockerfile
-├── dashboard/
-│   ├── app/
-│   ├── tests/
-│   ├── Dockerfile
-├── airflow/
-│   ├── dags/
-│   ├── Dockerfile
-=======
 │   └── Dockerfile
 ├── dashboard/
 │   ├── app/
@@ -63,7 +53,6 @@ dst-airlines/
 ├── airflow/
 │   ├── dags/ 
 │   └── Dockerfile
->>>>>>> Collecting_data
 ├── docker-compose.yml
 ├── README.md
 ├── requirements.txt
