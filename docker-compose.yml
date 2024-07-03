@@ -1,0 +1,26 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_DB: your_database
+      POSTGRES_USER: your_user
+      POSTGRES_PASSWORD: your_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data_modeling/sql/:/docker-entrypoint-initdb.d/
+
+  api:
+    build:
+      context: .  # Context is the root directory
+      dockerfile: ./api/Dockerfile  # Dockerfile is in the api directory
+    container_name: api
+    depends_on:
+      - postgres
+    volumes:
+      - ./data_collection/scripts/:/app/scripts/
+      - ./data_collection/collected_data/:/app/collected_data/
+    environment:
+      DATABASE_URL: postgres://your_user:your_password@postgres:5432/your_database
+    command: python /app/scripts/lufthansa_data_retrieval.py

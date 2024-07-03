@@ -81,6 +81,12 @@ dst-airlines/
    ```bash
    pip install -r requirements.txt
 
+3. **Running Docker Compose**:
+
+   Navigate to the root directory of your project where your docker-compose.yml file is located and run:
+   docker-compose up --build
+
+
 ### Environment Variables
 
 Create a `.env` file in the root directory of the project and add your credentials:

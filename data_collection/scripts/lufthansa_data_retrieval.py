@@ -1,6 +1,7 @@
 import requests
 import json
 import os
+import psycopg2
 from dotenv import load_dotenv
 
 # Load environment variables from .env file in the root directory
@@ -80,9 +81,30 @@ def get_aircraft():
     else:
         print(f"Failed to retrieve aircraft: {response.status_code}")
 
+def save_to_db(data, table_name):
+    DATABASE_URL = os.getenv('DATABASE_URL')
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+    
+    if table_name == 'aircraft':
+        for item in data['AircraftResource']['AircraftSummaries']['AircraftSummary']:
+            cur.execute("""
+                INSERT INTO aircraft (aircraft_code, name, airline_equip_code)
+                VALUES (%s, %s, %s)
+                ON CONFLICT (aircraft_code) DO NOTHING;
+            """, (item['AircraftCode'], item['Names']['Name']['$'], item.get('AirlineEquipCode', '')))
+    
+    conn.commit()
+    cur.close()
+    conn.close()
+
 # Retrieve and save data
 get_countries()
 get_cities()
 get_airports()
 get_airlines()
 get_aircraft()
+
+# Save data to the database
+if aircraft_data:
+    save_to_db(aircraft_data, 'aircraft')
