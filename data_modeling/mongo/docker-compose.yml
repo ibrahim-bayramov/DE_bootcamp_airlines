@@ -14,9 +14,10 @@ services:
 
   api:
     build: 
+      context: .  
+      dockerfile: ./api/Dockerfile
     container_name: api  
-       #context: .  
-       #dockerfile: ./api/Dockerfile
+
     depends_on:
       - mongodb  
     volumes:
