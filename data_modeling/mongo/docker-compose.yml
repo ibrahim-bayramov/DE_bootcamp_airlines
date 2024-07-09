@@ -4,7 +4,7 @@ services:
     image: mongo:latest  
     restart: unless-stopped  # Restart container automatically on failures
     environment:
-      #MONGODB_DB: airlines
+      MONGODB_DB: airlines
       MONGODB_USER: your_user
       MONGODB_PASSWORD: your_password
     ports:
@@ -15,8 +15,8 @@ services:
   api:
     build: 
     container_name: api  
-      #context: .  
-      #dockerfile: ./api/Dockerfile
+       #context: .  
+       #dockerfile: ./api/Dockerfile
     depends_on:
       - mongodb  
     volumes:
