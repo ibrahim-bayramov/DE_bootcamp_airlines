@@ -1,0 +1,14 @@
+mongoimport -d airlines -c aircraft --file ./data_collection/collected_data/aircraft.json
+mongoimport -d airlines -c airlines --file ./data_collection/collected_data/airlines.json
+mongoimport -d airlines -c airports --file ./data_collection/collected_data/airports.json
+mongoimport -d airlines -c acities --file ./data_collection/collected_data/cities.json
+mongoimport -d airlines -c countries --file ./data_collection/collected_data/countries.json
+
+# connect to database
+DB> use airlines
+
+# show the collections of database
+airlines> show collections
+
+# test for show a Document
+db.aircraft.fineOne()
