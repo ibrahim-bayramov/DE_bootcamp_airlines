@@ -25,6 +25,6 @@ services:
       - ./data_collection/collected_data/:/app/collected_data/
     environment:
       DATABASE_URL: mongodb://your_user:your_password@mongodb:27017/airlines
-    command: python /app/scripts/lufthansa_data_retrieval.py
+    command: python /app/scripts/mongo.py
 
 
