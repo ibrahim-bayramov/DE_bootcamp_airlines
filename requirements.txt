@@ -4,7 +4,7 @@ uvicorn==0.15.0
 requests==2.26.0
 
 # Database Management
-psycopg2==2.9.9
+psycopg2-binary==2.9.9
 pymongo==4.0.1
 
 # Testing

@@ -5,7 +5,7 @@ import psycopg2
 from dotenv import load_dotenv
 
 # Load environment variables from .env file in the root directory
-load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '../../.env'))
+load_dotenv()
 
 # Authentication details
 CLIENT_ID = os.getenv('CLIENT_ID')
@@ -22,7 +22,7 @@ headers = {
 }
 
 # Directory to save the collected data
-COLLECTED_DATA_DIR = os.path.join(os.path.dirname(__file__), '../collected_data')
+COLLECTED_DATA_DIR = 'collected_data'
 
 def save_json(data, filename):
     # Ensure the collected_data directory exists
@@ -31,55 +31,15 @@ def save_json(data, filename):
     with open(filepath, 'w') as f:
         json.dump(data, f, indent=4)
 
-def get_countries():
-    url = f'{BASE_URL}mds-references/countries'
+def get_data(endpoint, filename):
+    url = f'{BASE_URL}{endpoint}'
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
         data = response.json()
-        save_json(data, 'countries.json')
-        print("Countries data saved to collected_data/countries.json")
+        save_json(data, filename)
+        print(f"{filename} data saved to {COLLECTED_DATA_DIR}/{filename}")
     else:
-        print(f"Failed to retrieve countries: {response.status_code}")
-
-def get_cities():
-    url = f'{BASE_URL}mds-references/cities'
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        data = response.json()
-        save_json(data, 'cities.json')
-        print("Cities data saved to collected_data/cities.json")
-    else:
-        print(f"Failed to retrieve cities: {response.status_code}")
-
-def get_airports():
-    url = f'{BASE_URL}mds-references/airports'
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        data = response.json()
-        save_json(data, 'airports.json')
-        print("Airports data saved to collected_data/airports.json")
-    else:
-        print(f"Failed to retrieve airports: {response.status_code}")
-
-def get_airlines():
-    url = f'{BASE_URL}mds-references/airlines'
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        data = response.json()
-        save_json(data, 'airlines.json')
-        print("Airlines data saved to collected_data/airlines.json")
-    else:
-        print(f"Failed to retrieve airlines: {response.status_code}")
-
-def get_aircraft():
-    url = f'{BASE_URL}mds-references/aircraft'
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        data = response.json()
-        save_json(data, 'aircraft.json')
-        print("Aircraft data saved to collected_data/aircraft.json")
-    else:
-        print(f"Failed to retrieve aircraft: {response.status_code}")
+        print(f"Failed to retrieve {endpoint}: {response.status_code}")
 
 def save_to_db(data, table_name):
     DATABASE_URL = os.getenv('DATABASE_URL')
@@ -94,17 +54,53 @@ def save_to_db(data, table_name):
                 ON CONFLICT (aircraft_code) DO NOTHING;
             """, (item['AircraftCode'], item['Names']['Name']['$'], item.get('AirlineEquipCode', '')))
     
+    elif table_name == 'airports':
+        for item in data['Airports']:
+            cur.execute("""
+                INSERT INTO airports (airport_code, latitude, longitude, city_code, country_code, location_type, name, utc_offset, timezone_id)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                ON CONFLICT (airport_code) DO NOTHING;
+            """, (item['AirportCode'], item.get('Latitude'), item.get('Longitude'), item.get('CityCode'), item.get('CountryCode'),
+                  item.get('LocationType'), item.get('Name'), item.get('UtcOffset'), item.get('TimezoneId')))
+    
+    elif table_name == 'airlines':
+        for item in data['Airlines']:
+            cur.execute("""
+                INSERT INTO airlines (airline_id, airline_id_icao, name)
+                VALUES (%s, %s, %s)
+                ON CONFLICT (airline_id) DO NOTHING;
+            """, (item['AirlineId'], item.get('AirlineIdIcao', ''), item['Name']))
+    
+    elif table_name == 'cities':
+        for item in data['Cities']:
+            cur.execute("""
+                INSERT INTO cities (city_code, country_code, utc_offset, timezone_id, names, airports, meta)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+                ON CONFLICT (city_code) DO NOTHING;
+            """, (item['CityCode'], item.get('CountryCode'), item.get('UtcOffset'), item.get('TimezoneId'), 
+                  json.dumps(item.get('Names', {})), json.dumps(item.get('Airports', [])), json.dumps(item.get('Meta', {}))))
+    
+    elif table_name == 'countries':
+        for item in data['Countries']:
+            cur.execute("""
+                INSERT INTO countries (country_code, names, meta)
+                VALUES (%s, %s, %s)
+                ON CONFLICT (country_code) DO NOTHING;
+            """, (item['CountryCode'], json.dumps(item.get('Names', {})), json.dumps(item.get('Meta', {}))))
+    
     conn.commit()
     cur.close()
     conn.close()
 
 # Retrieve and save data
-get_countries()
-get_cities()
-get_airports()
-get_airlines()
-get_aircraft()
+get_data('mds-references/countries', 'countries.json')
+get_data('mds-references/cities', 'cities.json')
+get_data('mds-references/airports', 'airports.json')
+get_data('mds-references/airlines', 'airlines.json')
+get_data('mds-references/aircraft', 'aircraft.json')
 
 # Save data to the database
-if aircraft_data:
-    save_to_db(aircraft_data, 'aircraft')
+for table in ['aircraft', 'airports', 'airlines', 'cities', 'countries']:
+    with open(os.path.join(COLLECTED_DATA_DIR, f'{table}.json')) as f:
+        data = json.load(f)
+        save_to_db(data, table)

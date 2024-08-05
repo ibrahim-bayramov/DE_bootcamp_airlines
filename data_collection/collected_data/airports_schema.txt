@@ -1,0 +1,6 @@
+CREATE TABLE airports (
+    AirportResource.Airports.Airport JSONB
+    AirportResource.Meta.@Version TEXT
+    AirportResource.Meta.Link JSONB
+    AirportResource.Meta.TotalCount TEXT
+);
