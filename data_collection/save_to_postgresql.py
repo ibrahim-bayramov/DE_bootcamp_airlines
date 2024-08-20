@@ -108,13 +108,28 @@ def extract_cities_records(json_data):
 
 def extract_countries_records(json_data):
     country_data = json_data['CountryResource']['Countries']['Country']
-    return [
-        {
-            'country_code': item['CountryCode'],
-            'country_name': next(name['$'] for name in item['Names']['Name'] if name['@LanguageCode'] == 'EN')
-        }
-        for item in country_data
-    ]
+    records = []
+    
+    for item in country_data:
+        name_entries = item['Names']['Name']
+        
+        if isinstance(name_entries, list):
+            # If it's a list, find the name with the '@LanguageCode' equal to 'EN'
+            country_name = next((name['$'] for name in name_entries if name['@LanguageCode'] == 'EN'), None)
+        elif isinstance(name_entries, dict):
+            # If it's a single dictionary, check if it's in English
+            country_name = name_entries['$'] if name_entries.get('@LanguageCode') == 'EN' else None
+        else:
+            # If it's a string, just use it directly (assuming it’s in English)
+            country_name = name_entries
+        
+        if country_name:  # Ensure there's a valid country name before adding the record
+            records.append({
+                'country_code': item['CountryCode'],
+                'country_name': country_name
+            })
+    
+    return records
 
 # Mapping of files to their corresponding table names and record extractors
 file_configs = {
