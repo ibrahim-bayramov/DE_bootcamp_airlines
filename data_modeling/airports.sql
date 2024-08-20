@@ -1,9 +1,9 @@
 CREATE TABLE IF NOT EXISTS airports (
-    AirportCode                 VARCHAR(3) NOT NULL PRIMARY KEY,
-    PositionCoordinateLatitude  NUMERIC(8,4) NOT NULL,
-    PositionCoordinateLongitude NUMERIC(8,4) NOT NULL,
-    AirportName                 VARCHAR(20) NOT NULL,
-    CityCode                    VARCHAR(3) NOT NULL,
-    CountryCode                 VARCHAR(2) NOT NULL,
-    LocationType                VARCHAR(7) NOT NULL
+    airport_code                 VARCHAR(3) NOT NULL PRIMARY KEY,
+    position_coordinate_latitude  NUMERIC(8,4) NOT NULL,
+    position_coordinate_longitude NUMERIC(8,4) NOT NULL,
+    airport_name                 VARCHAR(20) NOT NULL,
+    city_code                    VARCHAR(3) NOT NULL,
+    country_code                 VARCHAR(2) NOT NULL,
+    location_type                VARCHAR(7) NOT NULL
 );

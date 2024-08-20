@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS aircraft (
-    AircraftCode      VARCHAR(3) NOT NULL PRIMARY KEY,
-    LanguageCode      VARCHAR(2) NOT NULL,
-    Aircraft_Name     VARCHAR(29) NOT NULL,
-    AirlineEquipCode  VARCHAR(4) NOT NULL
+    aircraft_code      VARCHAR(3) NOT NULL PRIMARY KEY,
+    language_code      VARCHAR(2),
+    aircraft_name      VARCHAR(29),
+    airline_equip_code VARCHAR(4) NOT NULL
 );

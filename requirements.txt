@@ -6,14 +6,16 @@ requests==2.26.0
 # Database Management
 psycopg2-binary==2.9.9
 pymongo==4.0.1
+SQLAlchemy==1.4.41   # Add SQLAlchemy for database interaction
+pandas==1.5.2        # Add pandas for DataFrame manipulation
 
 # Testing
 pytest==7.2.2
 requests-mock==1.9.3
 
 # Containerization
-docker==7.1.0
-docker-compose==1.29.2
+#docker==7.1.0
+#docker-compose==1.29.2
 
 # Environment variables handling
 python-dotenv
