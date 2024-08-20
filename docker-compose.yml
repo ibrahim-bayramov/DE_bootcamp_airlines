@@ -1,12 +1,44 @@
+version: '3.8'
 services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  mongo-express:
+    image: mongo-express
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo
+    ports:
+      - "8081:8081"
+
   postgres:
     image: postgres:latest
-    container_name: postgres
+    container_name: postgres_db
     environment:
-      POSTGRES_DB: your_database
-      POSTGRES_USER: your_user
-      POSTGRES_PASSWORD: your_password
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydatabase
     ports:
       - "5432:5432"
     volumes:
-      - ./data_modeling/sql/:/docker-entrypoint-initdb.d/
+      - pg_data:/var/lib/postgresql/data
+      - ./data_modeling:/docker-entrypoint-initdb.d
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+
+volumes:
+  mongo_data:
+  pg_data:

@@ -1,6 +1,0 @@
-CREATE TABLE aircraft (
-    AircraftResource.AircraftSummaries.AircraftSummary JSONB
-    AircraftResource.Meta.@Version TEXT
-    AircraftResource.Meta.Link JSONB
-    AircraftResource.Meta.TotalCount TEXT
-);

@@ -1,6 +1,0 @@
-CREATE TABLE countries (
-    CountryResource.Countries.Country JSONB
-    CountryResource.Meta.@Version TEXT
-    CountryResource.Meta.Link JSONB
-    CountryResource.Meta.TotalCount TEXT
-);

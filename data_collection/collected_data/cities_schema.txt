@@ -1,6 +1,0 @@
-CREATE TABLE cities (
-    CityResource.Cities.City JSONB
-    CityResource.Meta.@Version TEXT
-    CityResource.Meta.Link JSONB
-    CityResource.Meta.TotalCount TEXT
-);

@@ -1,6 +1,0 @@
-CREATE TABLE airlines (
-    AirlineResource.Airlines.Airline JSONB
-    AirlineResource.Meta.@Version TEXT
-    AirlineResource.Meta.Link JSONB
-    AirlineResource.Meta.TotalCount TEXT
-);
